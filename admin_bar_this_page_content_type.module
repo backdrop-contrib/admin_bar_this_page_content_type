@@ -1,0 +1,136 @@
+<?php
+/**
+* @file
+* Adds Content Type configuration links to the Admin Bar > This page submenu
+* when on a node.
+*/
+
+/**
+ * Implements hook_admin_bar_output_alter().
+ */
+function admin_bar_this_page_content_type_admin_bar_output_build(&$content) {
+  // Define the query array to return to current destination.
+  $query = array('query' => array(
+    'destination' => current_path(),
+  ));
+  // Check whether the user has permission to administer content types.
+  if (user_access("administer content types")) {
+    // Attempt to get the current node.
+    $node = menu_get_object();
+    // If the current page is a node, add the content type configuration links.
+    if ($node) {
+      // Get the node type so can get the human readable name.
+      $node_type = node_type_get_type($node);
+      // Add the content type configuration links.
+      $content['extra']['extra']['page']['page-content-type'] = array(
+        '#title' => t('Content Type (@content_type)', array(
+          '@content_type' => $node_type->name,
+        )),
+        '#href' => 'admin/structure/types/manage/' . $node->type,
+        '#attributes' => array(
+          'id' => array('admin-bar-page-content-type'),
+        ),
+        '#options' => $query,
+      );
+      $content['extra']['extra']['page']['page-content-type']['fields'] = array(
+        '#title' => t('Manage fields'),
+        '#href' => 'admin/structure/types/manage/' . $node->type . '/fields',
+        '#options' => $query,
+      );
+      $content['extra']['extra']['page']['page-content-type']['displays'] = array(
+        '#title' => t('Manage displays'),
+        '#href' => 'admin/structure/types/manage/' . $node->type . '/displays',
+        '#options' => $query,
+      );
+      $content['extra']['extra']['page']['page-content-type']['layouts'] = array(
+        '#title' => t('Manage layouts'),
+        '#href' => 'admin/structure/types/manage/' . $node->type . '/layouts',
+        '#options' => $query,
+      );
+    }
+    else {
+      // If the current page is not a node, we need to add blank links to they
+      // can be replaced by JS.
+      $content['extra']['extra']['page']['page-content-type'] = array(
+        '#title' => '',
+        '#href' => '',
+        '#attributes' => array(
+          'id' => array('admin-bar-page-content-type'),
+        ),
+      );
+      $content['extra']['extra']['page']['page-content-type']['fields'] = array(
+        '#title' => '',
+        '#href' => '',
+        '#options' => $query,
+      );
+      $content['extra']['extra']['page']['page-content-type']['displays'] = array(
+        '#title' => '',
+        '#href' => '',
+        '#options' => $query,
+      );
+      $content['extra']['extra']['page']['page-content-type']['layouts'] = array(
+        '#title' => '',
+        '#href' => '',
+        '#options' => $query,
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_admin_bar_replacements().
+ *
+ * @see admin_bar_links_page()
+ */
+function admin_bar_this_page_content_type_admin_bar_replacements($complete) {
+  $items = array();
+  // Define the query array to return to current destination.
+  $query = array('query' => array(
+    'destination' => current_path(),
+  ));
+  // If the complete menu is output, then it is uncached and will contain the
+  // correct links already.
+  if (!$complete) {
+    $components = config_get('admin_bar.settings', 'components');
+    // Check whether the page links component is enabled.
+    if (in_array('admin_bar.page', $components)) {
+      // Check whether the user has permission to administer content types.
+      if (user_access('administer content types')) {
+        // Attempt to get the current node.
+        $node = menu_get_object();
+        // If the current page is a node, update the content type configuration
+        // links.
+        if ($node) {
+          // Get the node type so can get the human readable name.
+          $node_type = node_type_get_type($node);
+          // Replace the content type configuration links.
+          $items['#admin-bar-page-content-type'] = l(t('Content Type (@type)', array('@type' => $node_type->name)), 'admin/structure/types/manage/' . $node->type, $query);
+          $items['#admin-bar-page-content-type'] .= theme('admin_bar_links', array('elements' => array(
+            '#level' => 2,
+            array(
+              '#title' => t('Manage fields'),
+              '#href' => 'admin/structure/types/manage/' . $node->type . '/fields',
+              '#options' => $query,
+            ),
+            array(
+              '#title' => t('Manage displays'),
+              '#href' => 'admin/structure/types/manage/' . $node->type . '/displays',
+              '#options' => $query,
+            ),
+            array(
+              '#title' => t('Manage layouts'),
+              '#href' => 'admin/structure/types/manage/' . $node->type . '/layouts',
+              '#options' => $query,
+            ),
+          )));
+        }
+        else {
+          // If the current page is not a node, replace the content type
+          // configuration links with a blank link.
+          $items['#admin-bar-page-content-type'] = '';
+        }
+      }
+    }
+  }
+  return $items;
+}

@@ -1,0 +1,14 @@
+name = Admin Bar This Page Content Type
+description = Adds Content Type configuration links to the Admin Bar > This page submenu when on a node.
+type = module
+backdrop = 1.x
+
+dependencies[] = admin_bar
+dependencies[] = node
+
+maintainers[yorkshire-pudding] = Martin Price
+
+package = Administration
+tags[] = Menus
+tags[] = Structure
+tags[] = Site Architecture
