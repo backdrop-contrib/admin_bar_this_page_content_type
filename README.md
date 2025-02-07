@@ -5,6 +5,8 @@ layouts' links.
 
 <img src="https://raw.githubusercontent.com/backdrop-contrib/admin_bar_this_page_content_type/1.x-1.x/images/Screenshot.png" width="100%">
 
+When not on a node, the menu items are not displayed.
+
 ## Installation
 Install this module using [the official Backdrop CMS instructions](https://backdropcms.org/guide/modules).
 
