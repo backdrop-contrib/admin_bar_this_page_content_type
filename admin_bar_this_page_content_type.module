@@ -114,7 +114,7 @@ function admin_bar_this_page_content_type_admin_bar_replacements($complete) {
             ),
             array(
               '#title' => t('Manage displays'),
-              '#href' => 'admin/structure/types/manage/' . $node->type . '/displays',
+              '#href' => 'admin/structure/types/manage/' . $node->type . '/display',
               '#options' => $query,
             ),
             array(
