@@ -39,7 +39,7 @@ function admin_bar_this_page_content_type_admin_bar_output_build(&$content) {
       );
       $content['extra']['extra']['page']['page-content-type']['displays'] = array(
         '#title' => t('Manage displays'),
-        '#href' => 'admin/structure/types/manage/' . $node->type . '/displays',
+        '#href' => 'admin/structure/types/manage/' . $node->type . '/display',
         '#options' => $query,
       );
       $content['extra']['extra']['page']['page-content-type']['layouts'] = array(
